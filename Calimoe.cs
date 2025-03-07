@@ -10,12 +10,27 @@ public class Calimoe : Game
     protected GraphicsDeviceManager _graphics;
     protected SpriteBatch _spriteBatch;
     protected int _fps = 0;
+    protected TextObject _fpsFont;
+    protected bool _showFPS = true;
 
     public Calimoe()
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
+    }
+
+    protected void StartFullScreen()
+    {
+        _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+        _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+        _graphics.IsFullScreen = true;
+        _graphics.ApplyChanges();
+    }
+
+    protected void SetTargetFPS(int fps)
+    {
+        this.TargetElapsedTime = TimeSpan.FromTicks(TimeSpan.TicksPerSecond / fps);
     }
 
     protected override void Initialize()
@@ -30,6 +45,7 @@ public class Calimoe : Game
         //Globals.pixel.SetData<Color>([Color.White]);
 
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+        _fpsFont = new TextObject(Content.Load<SpriteFont>("Fonts/FPS"), "", new Vector2(4, 4));
     }
 
     protected override void Update(GameTime gt)
@@ -44,6 +60,12 @@ public class Calimoe : Game
 
     protected override void Draw(GameTime gt)
     {
+        _spriteBatch.Begin();
+        if (_showFPS)
+        {
+            _fpsFont.DrawText(_spriteBatch, $"FPS: {_fps}");
+        }
+        _spriteBatch.End();
         base.Draw(gt);
     }
 

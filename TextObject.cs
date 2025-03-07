@@ -18,14 +18,14 @@ public class TextObject
 	protected Vector2 _position = Vector2.Zero;
     protected CenterText _centerMode = CenterText.None;
     protected int _otherAxis = 0;
-	protected Color _colour = Color.White;
+    protected Color _colour = Color.White;
 
-    public TextObject(SpriteFont font, string text, Vector2 pos, Color colour)
+    public TextObject(SpriteFont font, string text, Vector2 pos, Color colour = default)
 	{
 		_font = font;
 		_text = text;
         _position = pos;
-		_colour = colour;
+        _colour = (colour == default) ? _colour : colour;
 	}
 
     public TextObject(SpriteFont font)

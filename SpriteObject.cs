@@ -62,6 +62,15 @@ public class SpriteObject
         sb.Draw(_texture, _position, Color.White);
     }
 
+    public void DrawFlippedHorizontally(SpriteBatch sb)
+    {
+        sb.Draw(_texture, _position, null, Color.White, 0f, new Vector2(0, 0), 1f, SpriteEffects.FlipHorizontally, 0f);
+    }
+
+    public void DrawFlippedVertically(SpriteBatch sb)
+    {
+        sb.Draw(_texture, _position, null, Color.White, 0f, new Vector2(0, 0), 1f, SpriteEffects.FlipVertically, 0f);
+    }
     public void ReverseXDirection()
     {
         _velocity.X *= -1;
