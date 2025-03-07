@@ -15,8 +15,21 @@ public class SpriteObject
     protected Vector2 _startVelocity = Vector2.Zero;
 
 
-    public Vector2 Position => _position;
-    public Vector2 Velocity => _velocity;
+    public Vector2 Position
+    {
+        get => _position;
+        set
+        { 
+            _position = value;
+            UpdateBounds();
+        }
+    }
+    public Vector2 Velocity
+    {
+        get => _velocity;
+        set => _velocity = value;
+    }
+
     public Rectangle Bounds => _bounds;
 
     public SpriteObject(Texture2D texture)
@@ -41,8 +54,7 @@ public class SpriteObject
     public void Update(GameTime gt)
     {
         _position += _velocity * (float)gt.ElapsedGameTime.TotalSeconds;
-        _bounds.X = (int)_position.X;
-        _bounds.Y = (int)_position.Y; 
+        UpdateBounds();
     }
 
     public void Draw(SpriteBatch sb)
@@ -62,5 +74,11 @@ public class SpriteObject
     public void AdjustSpeed(float factor)
     {
         _velocity += Vector2.Normalize(_velocity) * factor;
+    }
+
+    protected void UpdateBounds()
+    {
+        _bounds.X = (int)_position.X;
+        _bounds.Y = (int)_position.Y;
     }
 }
