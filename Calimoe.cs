@@ -9,6 +9,11 @@ public class Calimoe : Game
 {
     protected GraphicsDeviceManager _graphics;
     protected SpriteBatch _spriteBatch;
+    protected AssetManager _am;
+    protected StateManager _sm;
+    protected InputHelper _ih;
+    protected Random _rand = new Random();
+
     protected int _fps = 0;
     protected TextObject _fpsFont;
     protected bool _showFPS = true;
@@ -16,6 +21,10 @@ public class Calimoe : Game
     public Calimoe()
     {
         _graphics = new GraphicsDeviceManager(this);
+        _am = new AssetManager(Content);
+        _sm = new StateManager();
+        _ih = new InputHelper();
+
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
     }
@@ -50,23 +59,22 @@ public class Calimoe : Game
 
     protected override void Update(GameTime gt)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            Exit();
-
-        UpdateFPS(gt);
-
         base.Update(gt);
+        UpdateFPS(gt);
     }
 
     protected override void Draw(GameTime gt)
     {
+        base.Draw(gt);
+
+        GraphicsDevice.Clear(Color.Black);
+
         _spriteBatch.Begin();
         if (_showFPS)
         {
             _fpsFont.DrawText(_spriteBatch, $"FPS: {_fps}");
         }
         _spriteBatch.End();
-        base.Draw(gt);
     }
 
     protected void UpdateFPS(GameTime gt)
