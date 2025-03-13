@@ -17,7 +17,7 @@ public class Calimoe : Game
 
     protected int _fps = 0;
     protected TextObject _fpsFont;
-    protected bool _showFPS = true;
+    protected bool _showFPS = false;
 
     public Calimoe()
     {

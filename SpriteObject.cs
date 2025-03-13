@@ -41,8 +41,11 @@ public class SpriteObject
             UpdateBounds();
         }
     }
-
     public Rectangle Bounds => _bounds;
+
+    public Vector2 Origin => new Vector2(_bounds.Width / 2f, _bounds.Height / 2f);
+    public Vector2 Center => new Vector2(_bounds.X + (_bounds.Width / 2f), _bounds.Y + (_bounds.Height / 2f));
+
 
     public SpriteObject(Texture2D texture)
     {
