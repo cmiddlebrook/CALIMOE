@@ -19,6 +19,7 @@ public class StateManager
     public void AddState(GameState state)
     {
         _states.Add(state.Name, state);
+        state.LoadContent();
     }
 
     public void SwitchState(string name)

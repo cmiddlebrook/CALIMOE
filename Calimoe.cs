@@ -23,6 +23,8 @@ public class Calimoe : Game
     {
         _graphics = new GraphicsDeviceManager(this);
 
+        Content.RootDirectory = "Content";
+        _am = new AssetManager(Content, _fallbackTextureSize);
         _sm = new StateManager();
         _ih = new InputHelper();
 
@@ -54,8 +56,7 @@ public class Calimoe : Game
         //Globals.pixel = new Texture2D(GraphicsDevice, 1, 1);
         //Globals.pixel.SetData<Color>([Color.White]);
 
-        Content.RootDirectory = "Content";
-        _am = new AssetManager(Content, _fallbackTextureSize);
+        _am.LoadContent();
         _fpsFont = new TextObject(_am.LoadFont("FPS"), "", new Vector2(4, 4));
     }
 

@@ -23,7 +23,6 @@ public class GameState
         _sm = sm;
         _am = am;
         _ih = ih;
-        LoadContent();
     }
 
     public virtual void Enter()
