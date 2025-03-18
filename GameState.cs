@@ -15,9 +15,10 @@ public class GameState
     protected InputHelper _ih;
 
     protected string _name = "";
-
-
     public string Name => _name;
+
+    protected Color _clearColour = Color.Transparent;
+    public Color ClearColour => _clearColour;
     public GameState(StateManager sm, AssetManager am, InputHelper ih)
     {
         _sm = sm;

@@ -3,8 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace CALIMOE;
-
-public class SpriteObject
+public class SpriteObject : GameObject
 {
 
     protected Texture2D _texture;
@@ -52,7 +51,7 @@ public class SpriteObject
     public Rectangle Bounds => _bounds;
 
     public Vector2 Origin => new Vector2(_bounds.Width / 2f, _bounds.Height / 2f);
-    public Vector2 Center => new Vector2(_bounds.X + (_bounds.Width / 2f), _bounds.Y + (_bounds.Height / 2f));
+    public Vector2 Center => new Vector2(_bounds.X + _bounds.Width / 2f, _bounds.Y + _bounds.Height / 2f);
 
 
     public SpriteObject(Texture2D texture)
@@ -76,13 +75,13 @@ public class SpriteObject
         _scale = _startScale;
     }
 
-    public void Update(GameTime gt)
+    public override void Update(GameTime gt)
     {
         _position += _velocity * (float)gt.ElapsedGameTime.TotalSeconds;
         UpdateBounds();
     }
 
-    public void Draw(SpriteBatch sb)
+    public override void Draw(SpriteBatch sb)
     {
         sb.Draw(_texture, _position, null, Colour, 0f, Vector2.Zero, _scale, SpriteEffects.None, 0f);
     }

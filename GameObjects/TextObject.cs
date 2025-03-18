@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CALIMOE;
 
-public class TextObject
+public class TextObject : GameObject
 {
     public enum CenterText
     {
@@ -25,7 +25,7 @@ public class TextObject
 		_font = font;
 		_text = text;
         _position = pos;
-        _colour = (colour == default) ? _colour : colour;
+        _colour = colour == default ? _colour : colour;
 	}
 
     public TextObject(SpriteFont font)
@@ -42,7 +42,10 @@ public class TextObject
 
         Draw(sb);
     }
-    public void Draw(SpriteBatch sb)
+
+    public override void Update(GameTime gt) { }
+    
+    public override void Draw(SpriteBatch sb)
 	{
         AdjustPositionForCentering(sb);
         sb.DrawString(_font, _text, _position, _colour);

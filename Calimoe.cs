@@ -15,17 +15,21 @@ public class Calimoe : Game
     protected Random _rand = new Random();
     protected int _fallbackTextureSize = 128;
 
+    protected TimeSpan _fpsTimer;
     protected int _fps = 0;
     protected TextObject _fpsFont;
-    protected bool _showFPS = false;
+    protected bool _showFPS = true;
+
+    public Color ClearColour {  get; set; }
 
     public Calimoe()
     {
         _graphics = new GraphicsDeviceManager(this);
+        ClearColour = Color.Transparent;
 
         Content.RootDirectory = "Content";
         _am = new AssetManager(Content, _fallbackTextureSize);
-        _sm = new StateManager();
+        _sm = new StateManager(this);
         _ih = new InputHelper();
 
         IsMouseVisible = true;
@@ -63,14 +67,22 @@ public class Calimoe : Game
     protected override void Update(GameTime gt)
     {
         base.Update(gt);
-        UpdateFPS(gt);
+        _fpsTimer += gt.ElapsedGameTime;
+        if (_fpsTimer >= TimeSpan.FromSeconds(1))
+        {
+            _fpsTimer = TimeSpan.Zero;
+            UpdateFPS(gt);
+        }
     }
 
     protected override void Draw(GameTime gt)
     {
         base.Draw(gt);
 
-        GraphicsDevice.Clear(Color.Black);
+        if (ClearColour != Color.Transparent)
+        {
+            GraphicsDevice.Clear(ClearColour);
+        }
 
         _spriteBatch.Begin();
         if (_showFPS)
@@ -79,6 +91,7 @@ public class Calimoe : Game
         }
         _spriteBatch.End();
     }
+
 
     protected void UpdateFPS(GameTime gt)
     {
