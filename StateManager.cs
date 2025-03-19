@@ -9,14 +9,15 @@ public class StateManager
 {
     private Calimoe _game;
     private Dictionary<string, GameState> _states;
+    //private Stack<GameState> _stateStack;
     private GameState _currentState;
 
     public string Current => _currentState?.Name ?? "";
-
     public StateManager(Calimoe game)
     {
         _game = game;
         _states = new Dictionary<string, GameState>();
+        //_stateStack = new Stack<GameState>();
     }
 
     public void AddState(GameState state)
@@ -37,16 +38,13 @@ public class StateManager
 
             _currentState = _states[name];
             _game.ClearColour = _currentState.ClearColour;
+
             _currentState.Enter();
         }
 
         Debug.Assert(_states.ContainsKey(name), $"State name '{name}'should be in the list");
     }
 
-    public GameState CurrentState()
-    {
-        return _currentState;
-    }
 
     public void Update(GameTime gt)
     {

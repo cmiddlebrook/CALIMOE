@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using System;
+using System.Diagnostics;
 
 
 namespace CALIMOE
@@ -25,6 +26,10 @@ namespace CALIMOE
             _silentSoundFx = _cm.Load<SoundEffect>("Fallback/silent-fx");
             _silentSong = _cm.Load<Song>("Fallback/silent-song");
             _missingTexture = _cm.Load<Texture2D>($"Fallback/missing-tx{_fallbackTextureSize}");
+
+            Debug.Assert(_silentSoundFx != null, "Missing silent sound effect");
+            Debug.Assert(_silentSong != null, "Missing silent song");
+            Debug.Assert(_missingTexture != null, "Missing missing texture");
         }
         public SpriteFont LoadFont(string name)
         {
