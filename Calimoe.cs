@@ -18,7 +18,7 @@ public class Calimoe : Game
     protected TimeSpan _fpsTimer;
     protected int _fps = 0;
     protected TextObject _fpsFont;
-    protected bool _showFPS = true;
+    protected bool _showFPS = false;
 
     public Color ClearColour {  get; set; }
 
