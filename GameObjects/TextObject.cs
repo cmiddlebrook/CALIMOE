@@ -14,16 +14,17 @@ public class TextObject : GameObject
     }
 
     protected SpriteFont _font = null;
-	protected string _text = "";
 	protected Vector2 _position = Vector2.Zero;
     protected CenterText _centerMode = CenterText.None;
     protected int _otherAxis = 0;
     protected Color _colour = Color.White;
 
+    public string Text { get; set; }
+
     public TextObject(SpriteFont font, string text, Vector2 pos, Color colour = default)
 	{
 		_font = font;
-		_text = text;
+        Text = text;
         _position = pos;
         _colour = colour == default ? _colour : colour;
 	}
@@ -35,7 +36,7 @@ public class TextObject : GameObject
 
     public void DrawText(SpriteBatch sb, string text, CenterText centerMode = CenterText.None, int otherAxis = 0)
     {
-        _text = text;
+        Text = text;
         _centerMode = centerMode;
         _otherAxis = otherAxis;
         AdjustPositionForCentering(sb);
@@ -48,13 +49,13 @@ public class TextObject : GameObject
     public override void Draw(SpriteBatch sb)
 	{
         AdjustPositionForCentering(sb);
-        sb.DrawString(_font, _text, _position, _colour);
+        sb.DrawString(_font, Text, _position, _colour);
 	}
 
     protected void AdjustPositionForCentering(SpriteBatch sb)
     {
         Rectangle viewport = sb.GraphicsDevice.Viewport.Bounds;
-        Vector2 stringSize = _font.MeasureString(_text);
+        Vector2 stringSize = _font.MeasureString(Text);
 
         switch (_centerMode)
         {
