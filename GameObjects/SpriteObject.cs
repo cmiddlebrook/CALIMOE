@@ -73,6 +73,7 @@ public class SpriteObject : GameObject
         _position = _startPosition;
         _velocity = _startVelocity;
         _scale = _startScale;
+        UpdateBounds();
     }
 
     public override void Update(GameTime gt)
