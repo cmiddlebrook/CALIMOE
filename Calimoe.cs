@@ -10,7 +10,7 @@ public class Calimoe : Game
     protected GraphicsDeviceManager _graphics;
     protected SpriteBatch _spriteBatch;
     protected AssetManager _am;
-    protected StateManager _sm;
+    protected SceneManager _sm;
     protected InputHelper _ih;
     protected Random _rand = new Random();
     protected int _fallbackTextureSize = 128;
@@ -25,11 +25,12 @@ public class Calimoe : Game
     public Calimoe()
     {
         _graphics = new GraphicsDeviceManager(this);
+        _graphics.SynchronizeWithVerticalRetrace = true;
         ClearColour = Color.Transparent;
 
         Content.RootDirectory = "Content";
         _am = new AssetManager(Content, _fallbackTextureSize);
-        _sm = new StateManager(this);
+        _sm = new SceneManager(this);
         _ih = new InputHelper();
 
         IsMouseVisible = true;

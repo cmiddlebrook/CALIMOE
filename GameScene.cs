@@ -8,9 +8,9 @@ using System.Collections.Generic;
 
 namespace CALIMOE;
 
-public class GameState
+public class GameScene
 {
-    protected StateManager _sm;
+    protected SceneManager _sm;
     protected AssetManager _am;
     protected InputHelper _ih;
 
@@ -19,7 +19,7 @@ public class GameState
 
     protected Color _clearColour = Color.Transparent;
     public Color ClearColour => _clearColour;
-    public GameState(StateManager sm, AssetManager am, InputHelper ih)
+    public GameScene(SceneManager sm, AssetManager am, InputHelper ih)
     {
         _sm = sm;
         _am = am;
