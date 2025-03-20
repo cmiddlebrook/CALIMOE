@@ -80,11 +80,6 @@ public class Calimoe : Game
     {
         base.Draw(gt);
 
-        if (ClearColour != Color.Transparent)
-        {
-            GraphicsDevice.Clear(ClearColour);
-        }
-
         _spriteBatch.Begin();
         if (_showFPS)
         {

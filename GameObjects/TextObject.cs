@@ -21,6 +21,12 @@ public class TextObject : GameObject
 
     public string Text { get; set; }
 
+    public Color Colour
+    {
+        get { return _colour; }
+        set { _colour = value; }
+    }
+
     public TextObject(SpriteFont font, string text, Vector2 pos, Color colour = default)
 	{
 		_font = font;
