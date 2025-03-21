@@ -46,11 +46,13 @@ public class SceneManager
 
     public void Update(GameTime gt)
     {
+        if (_currentScene == null) return;
         _currentScene.Update(gt);
     }
 
     public void Draw(SpriteBatch sb)
     {
+        if (_currentScene == null) return;
         _currentScene.Draw(sb);
     }
 
