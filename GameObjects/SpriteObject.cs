@@ -87,7 +87,6 @@ public class SpriteObject : GameObject
         // Round the position before drawing
         _position.X = (float)Math.Round(_position.X);
         _position.Y = (float)Math.Round(_position.Y);
-
         sb.Draw(_texture, _position, null, Colour, 0f, Vector2.Zero, _scale, SpriteEffects.None, 0f);
     }
 
