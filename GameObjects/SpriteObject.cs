@@ -5,15 +5,16 @@ using System;
 namespace CALIMOE;
 public class SpriteObject : GameObject
 {
-
     protected Texture2D _texture;
     protected Rectangle _bounds;
     protected Vector2 _position;
+    protected Vector2 _startPosition;
     protected Vector2 _velocity;
-    protected Vector2 _scale;
-    protected Vector2 _startPosition = Vector2.Zero;
-    protected Vector2 _startVelocity = Vector2.Zero;
-    protected Vector2 _startScale = Vector2.One;
+    protected Vector2 _startVelocity;
+    protected float _scale;
+    protected float _startScale;
+    protected float _rotation;
+    protected float _startRotation;
     protected Color _colour = Color.White;
 
 
@@ -32,7 +33,7 @@ public class SpriteObject : GameObject
         set => _velocity = value;
     }
 
-    public Vector2 Scale
+    public float Scale
     {
         get => _scale;
         set
@@ -40,6 +41,12 @@ public class SpriteObject : GameObject
             _scale = value;
             UpdateBounds();
         }
+    }
+
+    public float Rotation
+    {
+        get => _rotation;
+        set => _rotation = value;
     }
 
     public Color Colour
@@ -59,7 +66,7 @@ public class SpriteObject : GameObject
         _texture = texture;
         _bounds = _texture.Bounds;
     }
-    public SpriteObject(Texture2D texture, Vector2 startPosition, Vector2 startVelocity, Vector2 startScale)
+    public SpriteObject(Texture2D texture, Vector2 startPosition, Vector2 startVelocity, float startScale)
         : this(texture)
 	{
         _startPosition = startPosition;
@@ -73,6 +80,7 @@ public class SpriteObject : GameObject
         _position = _startPosition;
         _velocity = _startVelocity;
         _scale = _startScale;
+        _rotation = _startRotation;
         UpdateBounds();
     }
 
@@ -87,17 +95,17 @@ public class SpriteObject : GameObject
         // Round the position before drawing
         _position.X = (float)Math.Round(_position.X);
         _position.Y = (float)Math.Round(_position.Y);
-        sb.Draw(_texture, _position, null, Colour, 0f, Vector2.Zero, _scale, SpriteEffects.None, 0f);
+        sb.Draw(_texture, _position, null, Colour, _rotation, Vector2.Zero, _scale, SpriteEffects.None, 0f);
     }
 
     public void DrawFlippedHorizontally(SpriteBatch sb)
     {
-        sb.Draw(_texture, _position, null, Colour, 0f, new Vector2(0, 0), _scale, SpriteEffects.FlipHorizontally, 0f);
+        sb.Draw(_texture, _position, null, Colour, _rotation, new Vector2(0, 0), _scale, SpriteEffects.FlipHorizontally, 0f);
     }
 
     public void DrawFlippedVertically(SpriteBatch sb)
     {
-        sb.Draw(_texture, _position, null, Colour, 0f, new Vector2(0, 0), _scale, SpriteEffects.FlipVertically, 0f);
+        sb.Draw(_texture, _position, null, Colour, _rotation, new Vector2(0, 0), _scale, SpriteEffects.FlipVertically, 0f);
     }
     public void ReverseXDirection()
     {
@@ -116,8 +124,8 @@ public class SpriteObject : GameObject
     {
         _bounds.X = (int)Math.Round(_position.X);
         _bounds.Y = (int)Math.Round(_position.Y);
-        _bounds.Width = (int)(_texture.Width * _scale.X);
-        _bounds.Height = (int)(_texture.Height * _scale.Y);
+        _bounds.Width = (int)(_texture.Width * _scale);
+        _bounds.Height = (int)(_texture.Height * _scale);
     }
 
 }
