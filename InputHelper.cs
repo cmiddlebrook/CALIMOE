@@ -27,6 +27,16 @@ public class InputHelper
         return Keyboard.GetState().IsKeyDown(key);
     }
 
+    public bool StartKeyPress(Keys key)
+    {
+        return Keyboard.GetState().IsKeyDown(key) && _previousKeyboardState.IsKeyUp(key);
+    }
+
+    public bool KeyReleased(Keys key)
+    {
+        return Keyboard.GetState().IsKeyUp(key) && _previousKeyboardState.IsKeyDown(key);
+    }
+
     public bool KeyUp(Keys key)
     {
         return Keyboard.GetState().IsKeyUp(key);
