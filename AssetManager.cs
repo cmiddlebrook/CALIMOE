@@ -59,6 +59,14 @@ namespace CALIMOE
             }
         }
 
+        public SoundEffectInstance LoadLoopedSoundFx(string name)
+        {
+            var soundEffect = LoadSoundFx(name);
+            var fxInstance = soundEffect.CreateInstance();
+            fxInstance.IsLooped = true;
+            return fxInstance;
+        }
+
         public Song LoadMusic(string name)
         {
             try
