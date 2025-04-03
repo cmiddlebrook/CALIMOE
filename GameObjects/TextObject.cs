@@ -20,7 +20,6 @@ public class TextObject : GameObject
     protected Vector2 _textSize;
     protected CenterText _centerMode = CenterText.None;
     protected int _otherAxis = 0;
-    protected Color _colour = Color.White;
 
     public string Text
     {
@@ -32,23 +31,19 @@ public class TextObject : GameObject
         }
     }
 
-    public Color Colour
-    {
-        get { return _colour; }
-        set { _colour = value; }
-    }
-
     public TextObject(SpriteFont font, string text, Vector2 pos, Color colour = default)
 	{
 		_font = font;
         Text = text;
         _position = pos;
         _colour = colour == default ? _colour : colour;
+        UpdateBounds();
 	}
 
     public TextObject(SpriteFont font)
 	{
         _font = font;
+        UpdateBounds();
     }
     protected override void UpdateBounds()
     {
@@ -70,12 +65,16 @@ public class TextObject : GameObject
         Draw(sb);
     }
 
-    public override void Update(GameTime gt) { }
+    public override void Update(GameTime gt)
+    {
+        base.Update(gt);
+    }
     
     public override void Draw(SpriteBatch sb)
 	{
         AdjustPositionForCentering(sb);
         sb.DrawString(_font, Text, _position, _colour);
+
         base.Draw(sb);
     }
 

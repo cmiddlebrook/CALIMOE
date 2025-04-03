@@ -5,24 +5,28 @@ using System;
 namespace CALIMOE;
 public class SpriteObject : GameObject
 {
-    protected Texture2D _texture;
-    protected Vector2 _startPosition;
-    protected Vector2 _velocity;
-    protected Vector2 _startVelocity;
     protected Vector2 _origin;
-    protected Vector2 _startOrigin;
-    protected float _scale = 1.0f;
-    protected float _startScale;
     protected float _rotation;
+    protected float _scale = 1.0f;
+    protected Vector2 _startOrigin;
+    protected Vector2 _startPosition;
     protected float _startRotation;
-    protected Color _colour = Color.White;
+    protected float _startScale = 1.0f;
+    protected Vector2 _startVelocity;
+    protected Texture2D _texture;
+    protected Vector2 _velocity;
 
-
-
-    public Vector2 Velocity
+    public Vector2 Origin
     {
-        get => _velocity;
-        set => _velocity = value;
+        get => _origin;
+        set => _origin = value;
+    }
+
+
+    public float Rotation
+    {
+        get => _rotation;
+        set => _rotation = value;
     }
 
     public float Scale
@@ -31,23 +35,12 @@ public class SpriteObject : GameObject
         set => _scale = value;
     }
 
-    public float Rotation
+    public Vector2 Velocity
     {
-        get => _rotation;
-        set => _rotation = value;
+        get => _velocity;
+        set => _velocity = value;
     }
 
-    public Vector2 Origin
-    {
-        get => _origin;
-        set => _origin = value;
-    }
-
-    public Color Colour
-    {
-        get => _colour;
-        set => _colour = value;
-    }
 
 
     public Vector2 Center => new Vector2(_bounds.X + _bounds.Width / 2f, _bounds.Y + _bounds.Height / 2f);
@@ -68,12 +61,13 @@ public class SpriteObject : GameObject
         Reset();
 	}
 
-    public void Reset()
+    public override void Reset()
     {
         _position = _startPosition;
         _velocity = _startVelocity;
         _scale = _startScale;
         _rotation = _startRotation;
+        UpdateBounds();
     }
 
     protected override void UpdateBounds()
@@ -87,6 +81,8 @@ public class SpriteObject : GameObject
     public override void Update(GameTime gt)
     {
         _position += _velocity * (float)gt.ElapsedGameTime.TotalSeconds;
+
+        base.Update(gt);
     }
 
     public override void Draw(SpriteBatch sb)
@@ -95,18 +91,19 @@ public class SpriteObject : GameObject
         _position.X = (float)Math.Round(_position.X);
         _position.Y = (float)Math.Round(_position.Y);
         sb.Draw(_texture, Position, null, Colour, Rotation, Origin, Scale, SpriteEffects.None, 0f);
+
         base.Draw(sb);
     }
 
-    public void DrawFlippedHorizontally(SpriteBatch sb)
-    {
-        sb.Draw(_texture, Position, null, Colour, Rotation, Origin, Scale, SpriteEffects.FlipHorizontally, 0f);
-    }
+    //public void DrawFlippedHorizontally(SpriteBatch sb)
+    //{
+    //    sb.Draw(_texture, Position, null, Colour, Rotation, Origin, Scale, SpriteEffects.FlipHorizontally, 0f);
+    //}
 
-    public void DrawFlippedVertically(SpriteBatch sb)
-    {
-        sb.Draw(_texture, Position, null, Colour, Rotation, Origin, Scale, SpriteEffects.FlipVertically, 0f);
-    }
+    //public void DrawFlippedVertically(SpriteBatch sb)
+    //{
+    //    sb.Draw(_texture, Position, null, Colour, Rotation, Origin, Scale, SpriteEffects.FlipVertically, 0f);
+    //}
     public void ReverseXDirection()
     {
         _velocity.X *= -1;
