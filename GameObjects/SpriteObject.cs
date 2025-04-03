@@ -6,8 +6,6 @@ namespace CALIMOE;
 public class SpriteObject : GameObject
 {
     protected Texture2D _texture;
-    protected Rectangle _bounds;
-    protected Vector2 _position;
     protected Vector2 _startPosition;
     protected Vector2 _velocity;
     protected Vector2 _startVelocity;
@@ -20,15 +18,7 @@ public class SpriteObject : GameObject
     protected Color _colour = Color.White;
 
 
-    public Vector2 Position
-    {
-        get => _position;
-        set
-        { 
-            _position = value;
-            UpdateBounds();
-        }
-    }
+
     public Vector2 Velocity
     {
         get => _velocity;
@@ -38,11 +28,7 @@ public class SpriteObject : GameObject
     public float Scale
     {
         get => _scale;
-        set
-        {
-            _scale = value;
-            UpdateBounds();
-        }
+        set => _scale = value;
     }
 
     public float Rotation
@@ -54,11 +40,7 @@ public class SpriteObject : GameObject
     public Vector2 Origin
     {
         get => _origin;
-        set
-        {
-            _origin = value;
-            UpdateBounds();
-        }
+        set => _origin = value;
     }
 
     public Color Colour
@@ -67,7 +49,6 @@ public class SpriteObject : GameObject
         set => _colour = value;
     }
 
-    public Rectangle Bounds => _bounds;
 
     public Vector2 Center => new Vector2(_bounds.X + _bounds.Width / 2f, _bounds.Y + _bounds.Height / 2f);
 
@@ -75,12 +56,12 @@ public class SpriteObject : GameObject
     public SpriteObject(Texture2D texture)
     {
         _texture = texture;
-        _bounds = _texture.Bounds;
-        _origin = Vector2.Zero; //  new Vector2(_bounds.Width / 2f, _bounds.Height / 2f);
+        Reset();
     }
     public SpriteObject(Texture2D texture, Vector2 startPosition, Vector2 startVelocity, float startScale)
-        : this(texture)
 	{
+        _texture = texture;
+        _origin = Vector2.Zero;
         _startPosition = startPosition;
         _startVelocity = startVelocity;
         _startScale = startScale;
@@ -93,13 +74,19 @@ public class SpriteObject : GameObject
         _velocity = _startVelocity;
         _scale = _startScale;
         _rotation = _startRotation;
-        UpdateBounds();
+    }
+
+    protected override void UpdateBounds()
+    {
+        _bounds.X = (int)Math.Round(_position.X);
+        _bounds.Y = (int)Math.Round(_position.Y);
+        _bounds.Width = (int)(_texture.Width * _scale);
+        _bounds.Height = (int)(_texture.Height * _scale);
     }
 
     public override void Update(GameTime gt)
     {
         _position += _velocity * (float)gt.ElapsedGameTime.TotalSeconds;
-        UpdateBounds();
     }
 
     public override void Draw(SpriteBatch sb)
@@ -108,6 +95,7 @@ public class SpriteObject : GameObject
         _position.X = (float)Math.Round(_position.X);
         _position.Y = (float)Math.Round(_position.Y);
         sb.Draw(_texture, Position, null, Colour, Rotation, Origin, Scale, SpriteEffects.None, 0f);
+        base.Draw(sb);
     }
 
     public void DrawFlippedHorizontally(SpriteBatch sb)
@@ -132,12 +120,6 @@ public class SpriteObject : GameObject
     {
         _velocity += Vector2.Normalize(_velocity) * factor;
     }
-    protected void UpdateBounds()
-    {
-        _bounds.X = (int)Math.Round(_position.X);
-        _bounds.Y = (int)Math.Round(_position.Y);
-        _bounds.Width = (int)(_texture.Width * _scale);
-        _bounds.Height = (int)(_texture.Height * _scale);
-    }
+
 
 }

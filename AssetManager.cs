@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using System;
 using System.Diagnostics;
+using System.Reflection.Metadata;
 
 
 namespace CALIMOE
@@ -18,6 +19,8 @@ namespace CALIMOE
         public AssetManager(ContentManager cm, int fallbackTextureSize)
         {
             _cm = cm;
+            cm.RootDirectory = "Content";
+
             _fallbackTextureSize = fallbackTextureSize;
         }
 

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CALIMOE;
 
@@ -14,12 +16,21 @@ public class TextObject : GameObject
     }
 
     protected SpriteFont _font = null;
-	protected Vector2 _position = Vector2.Zero;
+    protected string _text;
+    protected Vector2 _textSize;
     protected CenterText _centerMode = CenterText.None;
     protected int _otherAxis = 0;
     protected Color _colour = Color.White;
 
-    public string Text { get; set; }
+    public string Text
+    {
+        get { return _text; }
+        set
+        {
+            _text = value;
+            UpdateBounds();
+        }
+    }
 
     public Color Colour
     {
@@ -39,6 +50,15 @@ public class TextObject : GameObject
 	{
         _font = font;
     }
+    protected override void UpdateBounds()
+    {
+        _textSize = _font.MeasureString(_text);
+        _bounds.X = (int)Math.Round(_position.X);
+        _bounds.Y = (int)Math.Round(_position.Y);
+        _bounds.Width = (int)_textSize.X;
+        _bounds.Height = (int)_textSize.Y;
+    }
+
 
     public void DrawText(SpriteBatch sb, string text, CenterText centerMode = CenterText.None, int otherAxis = 0)
     {
@@ -56,7 +76,8 @@ public class TextObject : GameObject
 	{
         AdjustPositionForCentering(sb);
         sb.DrawString(_font, Text, _position, _colour);
-	}
+        base.Draw(sb);
+    }
 
     protected void AdjustPositionForCentering(SpriteBatch sb)
     {
