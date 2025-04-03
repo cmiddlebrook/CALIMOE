@@ -72,8 +72,8 @@ public class SpriteObject : GameObject
 
     protected override void UpdateBounds()
     {
-        _bounds.X = (int)Math.Round(_position.X);
-        _bounds.Y = (int)Math.Round(_position.Y);
+        _bounds.X = (int)Math.Round(_position.X - _origin.X);
+        _bounds.Y = (int)Math.Round(_position.Y - _origin.Y);
         _bounds.Width = (int)(_texture.Width * _scale);
         _bounds.Height = (int)(_texture.Height * _scale);
     }
