@@ -62,7 +62,8 @@ public class Calimoe : Game
         //Globals.pixel.SetData<Color>([Color.White]);
 
         _am.LoadContent();
-        _fpsFont = new TextObject(_am.LoadFont("FPS"), "", new Vector2(4, 4));
+        _fpsFont = new TextObject(_am.LoadFont("FPS"), "");
+        _fpsFont.Position = new Vector2(4, 4);
     }
 
     protected override void Update(GameTime gt)
@@ -83,7 +84,8 @@ public class Calimoe : Game
         _spriteBatch.Begin();
         if (_showFPS)
         {
-            _fpsFont.DrawText(_spriteBatch, $"FPS: {_fps}");
+            _fpsFont.Text = $"FPS: {_fps}";
+            _fpsFont.Draw(_spriteBatch);
         }
         _spriteBatch.End();
     }

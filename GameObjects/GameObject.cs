@@ -11,6 +11,9 @@ public abstract class GameObject
     protected Color _colour = Color.White;
     protected bool _drawBounds = false;
     protected Vector2 _position;
+    protected float _scale = 1.0f;
+    protected float _startScale = 1.0f;
+
 
 
     public Rectangle Bounds
@@ -37,7 +40,17 @@ public abstract class GameObject
         set => _position = value;
     }
 
+    public float Scale
+    {
+        get => _scale;
+        set => _scale = value;
+    }
+
     protected abstract void UpdateBounds();
+
+    /// <summary>
+    /// Every derived class MUST call base.Update(gt) to ensure the bounds are updated.
+    /// </summary>
     public virtual void Update(GameTime gt)
     {
         UpdateBounds();
@@ -52,8 +65,9 @@ public abstract class GameObject
 
     public virtual void Reset()
     {
-        _position = Vector2.Zero;
         _bounds = Rectangle.Empty;
+        _position = Vector2.Zero;
+        _scale = 1.0f;
     }
 
 }

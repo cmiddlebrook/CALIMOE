@@ -7,7 +7,7 @@ namespace CALIMOE;
 
 public class TextObject : GameObject
 {
-    public enum CenterText
+    public enum Alignment
     {
         None,
         Horizontal,
@@ -15,55 +15,40 @@ public class TextObject : GameObject
         Both
     }
 
+    protected Alignment _alignment = Alignment.None;
     protected SpriteFont _font = null;
-    protected string _text;
+    protected Color _shadowColour = Color.Black;
+    protected int _shadowThickness = 5;
     protected Vector2 _textSize;
-    protected CenterText _centerMode = CenterText.None;
-    protected int _otherAxis = 0;
 
-    public string Text
-    {
-        get { return _text; }
-        set
-        {
-            _text = value;
-            UpdateBounds();
-        }
-    }
 
-    public TextObject(SpriteFont font, string text, Vector2 pos, Color colour = default)
-	{
-		_font = font;
-        Text = text;
-        _position = pos;
-        _colour = colour == default ? _colour : colour;
-        UpdateBounds();
-	}
+    public string Text { get; set; } = string.Empty;
+
+    public bool Shadow { get; set; } = false;
+
+    public Rectangle Viewport { get; set; } = Rectangle.Empty;
 
     public TextObject(SpriteFont font)
 	{
         _font = font;
+        Text = string.Empty;
+    }
+
+    public TextObject(SpriteFont font, string text)
+    {
+        _font = font;
+        Text = text;
         UpdateBounds();
     }
     protected override void UpdateBounds()
     {
-        _textSize = _font.MeasureString(_text);
+        _textSize = _font.MeasureString(Text) * Scale;
         _bounds.X = (int)Math.Round(_position.X);
         _bounds.Y = (int)Math.Round(_position.Y);
         _bounds.Width = (int)_textSize.X;
         _bounds.Height = (int)_textSize.Y;
     }
 
-
-    public void DrawText(SpriteBatch sb, string text, CenterText centerMode = CenterText.None, int otherAxis = 0)
-    {
-        Text = text;
-        _centerMode = centerMode;
-        _otherAxis = otherAxis;
-        AdjustPositionForCentering(sb);
-
-        Draw(sb);
-    }
 
     public override void Update(GameTime gt)
     {
@@ -72,60 +57,68 @@ public class TextObject : GameObject
     
     public override void Draw(SpriteBatch sb)
 	{
-        AdjustPositionForCentering(sb);
-        sb.DrawString(_font, Text, _position, _colour);
+        if (Viewport == Rectangle.Empty)
+        {
+            Viewport = sb.GraphicsDevice.Viewport.Bounds;
+        }
+
+        switch (_alignment)
+        {
+            case Alignment.Horizontal:
+                {
+                    _position.X = (Viewport.Width - _textSize.X) / 2;
+                    break;
+                }
+            case Alignment.Vertical:
+                {
+                    _position.Y = (Viewport.Height - _textSize.Y) / 2;
+                    break;
+                }
+            case Alignment.Both:
+                {
+                    _position.X = (Viewport.Width - _textSize.X) / 2;
+                    _position.Y = (Viewport.Height - _textSize.Y) / 2;
+                    break;
+                }
+
+            case Alignment.None:
+            default:
+                break;
+        }
+
+        if (Shadow)
+        {
+            var shadowPosition = new Vector2(Position.X + _shadowThickness, Position.Y + _shadowThickness);
+            sb.DrawString(_font, Text, shadowPosition, _shadowColour, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+        }
+        sb.DrawString(_font, Text, Position, _colour, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
 
         base.Draw(sb);
     }
 
-    protected void AdjustPositionForCentering(SpriteBatch sb)
+
+
+    public void CenterHorizontal(int y)
     {
-        Rectangle viewport = sb.GraphicsDevice.Viewport.Bounds;
-        Vector2 stringSize = _font.MeasureString(Text);
-
-        switch (_centerMode)
-        {
-            case CenterText.Horizontal:
-                {
-                    CenterHorizontal(viewport, stringSize);
-                    break;
-                }
-
-            case CenterText.Vertical:
-                {
-                    CenterVertical(viewport, stringSize);
-                    break;
-                }
-
-            case CenterText.Both:
-                {
-                    CenterBoth(viewport, stringSize);
-                    break;
-                }
-
-            case CenterText.None:
-            default:
-                {
-                    break;
-                }
-        }
+        _alignment = Alignment.Horizontal;
+        _position.Y = y;
     }
 
-    protected void CenterHorizontal(Rectangle viewport, Vector2 stringSize)
+    public void CenterVertical(int x)
     {
-        _position.X = (viewport.Width - stringSize.X) / 2;
-        _position.Y = _otherAxis;
+        _alignment = Alignment.Vertical;
+        _position.X = x;
     }
 
-    protected void CenterVertical(Rectangle viewport, Vector2 stringSize)
+    public void CenterBoth()
     {
-        _position.Y = (viewport.Height - stringSize.Y) / 2;
-        _position.X = _otherAxis;
+        _alignment = Alignment.Both;
     }
 
-    protected void CenterBoth(Rectangle viewport, Vector2 stringSize)
+    public void ConfigureShadow(int thickness, Color colour)
     {
-        _position.X = (viewport.Width - stringSize.X) / 2;
-        _position.Y = (viewport.Height - stringSize.Y) / 2;
+        Shadow = true;
+        _shadowThickness = thickness;
+        _shadowColour = colour;
     }
 }

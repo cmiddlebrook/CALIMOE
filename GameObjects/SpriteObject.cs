@@ -7,11 +7,9 @@ public class SpriteObject : GameObject
 {
     protected Vector2 _origin;
     protected float _rotation;
-    protected float _scale = 1.0f;
     protected Vector2 _startOrigin;
     protected Vector2 _startPosition;
     protected float _startRotation;
-    protected float _startScale = 1.0f;
     protected Vector2 _startVelocity;
     protected Texture2D _texture;
     protected Vector2 _velocity;
@@ -29,11 +27,6 @@ public class SpriteObject : GameObject
         set => _rotation = value;
     }
 
-    public float Scale
-    {
-        get => _scale;
-        set => _scale = value;
-    }
 
     public Vector2 Velocity
     {
@@ -57,7 +50,7 @@ public class SpriteObject : GameObject
         _origin = Vector2.Zero;
         _startPosition = startPosition;
         _startVelocity = startVelocity;
-        _startScale = startScale;
+        Scale = startScale;
         Reset();
 	}
 
@@ -65,7 +58,7 @@ public class SpriteObject : GameObject
     {
         _position = _startPosition;
         _velocity = _startVelocity;
-        _scale = _startScale;
+        Scale = _startScale;
         _rotation = _startRotation;
         UpdateBounds();
     }
@@ -74,8 +67,8 @@ public class SpriteObject : GameObject
     {
         _bounds.X = (int)Math.Round(_position.X - _origin.X);
         _bounds.Y = (int)Math.Round(_position.Y - _origin.Y);
-        _bounds.Width = (int)(_texture.Width * _scale);
-        _bounds.Height = (int)(_texture.Height * _scale);
+        _bounds.Width = (int)(_texture.Width * Scale);
+        _bounds.Height = (int)(_texture.Height * Scale);
     }
 
     public override void Update(GameTime gt)
@@ -95,15 +88,16 @@ public class SpriteObject : GameObject
         base.Draw(sb);
     }
 
-    //public void DrawFlippedHorizontally(SpriteBatch sb)
-    //{
-    //    sb.Draw(_texture, Position, null, Colour, Rotation, Origin, Scale, SpriteEffects.FlipHorizontally, 0f);
-    //}
+    public void DrawFlippedHorizontally(SpriteBatch sb)
+    {
+        sb.Draw(_texture, Position, null, Colour, Rotation, Origin, Scale, SpriteEffects.FlipHorizontally, 0f);
+    }
 
-    //public void DrawFlippedVertically(SpriteBatch sb)
-    //{
-    //    sb.Draw(_texture, Position, null, Colour, Rotation, Origin, Scale, SpriteEffects.FlipVertically, 0f);
-    //}
+    public void DrawFlippedVertically(SpriteBatch sb)
+    {
+        sb.Draw(_texture, Position, null, Colour, Rotation, Origin, Scale, SpriteEffects.FlipVertically, 0f);
+    }
+
     public void ReverseXDirection()
     {
         _velocity.X *= -1;
