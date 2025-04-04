@@ -14,6 +14,8 @@ public class Clock
 
     public TimeSpan GameTime => _gameTime;
 
+    public float Progress => (float)(_elapsedRealTime.TotalSeconds / _realCycleDuration.TotalSeconds);
+
     public bool Finished => _elapsedRealTime > _realCycleDuration;
 
     public Clock(TimeSpan realCycleDuration, TimeSpan startTime, TimeSpan endTime)
