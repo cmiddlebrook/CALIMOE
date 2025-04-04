@@ -7,7 +7,7 @@ namespace CALIMOE;
 
 public class TextObject : GameObject
 {
-    public enum Alignment
+    protected enum Alignment
     {
         None,
         Horizontal,
