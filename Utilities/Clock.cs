@@ -16,7 +16,7 @@ public class Clock
 
     public float Progress => (float)(_elapsedRealTime.TotalSeconds / _realCycleDuration.TotalSeconds);
 
-    public bool Finished => _elapsedRealTime > _realCycleDuration;
+    public bool Finished => _elapsedRealTime >= _realCycleDuration;
 
     public bool Paused { get; set; } = false;
 
@@ -39,6 +39,13 @@ public class Clock
         _elapsedRealTime += gt.ElapsedGameTime;
         double progress = _elapsedRealTime.TotalSeconds / _realCycleDuration.TotalSeconds;
         _gameTime = _startTime + TimeSpan.FromHours(progress * _virtualCycleDuration.TotalHours);
+    }
+
+    public void Reset()
+    {
+        _elapsedRealTime = TimeSpan.Zero;
+        _gameTime = _startTime;
+        Paused = false;
     }
 
 

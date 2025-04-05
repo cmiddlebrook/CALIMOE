@@ -49,8 +49,9 @@ public class SpriteObject : GameObject
         _texture = texture;
         _origin = Vector2.Zero;
         _startPosition = startPosition;
+        _startScale = startScale;
         _startVelocity = startVelocity;
-        Scale = startScale;
+        Scale = _startScale;
         Reset();
 	}
 
