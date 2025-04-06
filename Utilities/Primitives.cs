@@ -30,9 +30,9 @@ public static class Primitives
 
     public static void DrawRectangle(SpriteBatch sb, Rectangle rect, Color colour, int thickness)
     {
-        DrawLine(sb, new Vector2(rect.Left, rect.Top), new Vector2(rect.Right + 1, rect.Top), colour, thickness); // top
+        DrawLine(sb, new Vector2(rect.Left, rect.Top), new Vector2(rect.Right, rect.Top), colour, thickness); // top
         DrawLine(sb, new Vector2(rect.Left, rect.Top), new Vector2(rect.Left, rect.Bottom), colour, thickness); // left
-        DrawLine(sb, new Vector2(rect.Left, rect.Bottom), new Vector2(rect.Right + 1, rect.Bottom), colour, thickness); // bottom
-        DrawLine(sb, new Vector2(rect.Right + 1, rect.Top), new Vector2(rect.Right + 1, rect.Bottom), colour, thickness); //right
+        DrawLine(sb, new Vector2(rect.Left, rect.Bottom), new Vector2(rect.Right, rect.Bottom), colour, thickness); // bottom
+        DrawLine(sb, new Vector2(rect.Right, rect.Top), new Vector2(rect.Right, rect.Bottom), colour, thickness); // right
     }
 }

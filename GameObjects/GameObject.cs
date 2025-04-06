@@ -37,13 +37,21 @@ public abstract class GameObject
     public Vector2 Position
     {
         get => _position;
-        set => _position = value;
+        set
+        {
+            _position = value;
+            UpdateBounds();
+        }
     }
 
     public float Scale
     {
         get => _scale;
-        set => _scale = value;
+        set
+        {
+            _scale = value;
+            UpdateBounds();
+        }
     }
 
     protected abstract void UpdateBounds();

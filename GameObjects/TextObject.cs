@@ -52,7 +52,7 @@ public class TextObject : GameObject
 
     public override void Update(GameTime gt)
     {
-        base.Update(gt);
+        UpdateBounds();
     }
     
     public override void Draw(SpriteBatch sb)
