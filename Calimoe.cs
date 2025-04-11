@@ -7,24 +7,27 @@ namespace CALIMOE;
 
 public class Calimoe : Game
 {
+    // Graphics
     protected GraphicsDeviceManager _graphics;
     protected SpriteBatch _spriteBatch;
-    protected SceneManager _sm;
-    protected InputHelper _ih;    
     protected int _fallbackTextureSize = 128;
-
-    protected TimeSpan _fpsTimer;
-    protected int _fps = 0;
-    protected TextObject _fpsFont;
-    protected bool _showFPS = true;
-
-    protected Color _noColour = Color.White;
-
     protected Matrix _spriteScale;
-    protected Point _worldSize;
     protected Point _windowSize;
+    protected Point _worldSize;
 
+    // Systems
+    protected InputHelper _ih;
+    protected SceneManager _sm;
+
+    // FPS
+    protected int _fps = 0;
+    protected TimeSpan _fpsTimer;
+    protected TextObject _fpsFont;
+
+
+    // Properties
     public static AssetManager AssetManager { get; private set; }
+    public static Color NoColour => Color.White;
     public static Random Random { get; private set; } = new Random();
 
     public Color ClearColour {  get; set; }
@@ -34,6 +37,8 @@ public class Calimoe : Game
         get { return _graphics.IsFullScreen; }
         set { ApplyResolution(value); }
     }
+
+    protected bool ShowFPS { get; set; } = true;
 
     public Calimoe()
     {
@@ -95,18 +100,21 @@ public class Calimoe : Game
         return viewport;
     }
 
-    protected Vector2 ScreenToWorld(Vector2 screenPosition)
+    protected override void Draw(GameTime gt)
     {
-        Vector2 viewportTopLeft = new Vector2(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y);
-        Vector2 adjusted = screenPosition - viewportTopLeft;
-        Matrix inverse = Matrix.Invert(_spriteScale);
-        return Vector2.Transform(adjusted, inverse);
-    }
+        base.Draw(gt);
 
+        // this _spritescale needs to be applied to my SCENE Draw code!
+        // this snippet is just for the FPS display
+        //_spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, _spriteScale);
 
-    protected void SetTargetFPS(int fps)
-    {
-        this.TargetElapsedTime = TimeSpan.FromTicks(TimeSpan.TicksPerSecond / fps);
+        _spriteBatch.Begin();
+        if (ShowFPS)
+        {
+            _fpsFont.Text = $"FPS: {_fps}";
+            _fpsFont.Draw(_spriteBatch);
+        }
+        _spriteBatch.End();
     }
 
     protected override void Initialize()
@@ -122,32 +130,33 @@ public class Calimoe : Game
         _fpsFont.Position = new Vector2(4, 4);
     }
 
+    protected Vector2 ScreenToWorld(Vector2 screenPosition)
+    {
+        Vector2 viewportTopLeft = new Vector2(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y);
+        Vector2 adjusted = screenPosition - viewportTopLeft;
+        Matrix inverse = Matrix.Invert(_spriteScale);
+        return Vector2.Transform(adjusted, inverse);
+    }
+
+    protected void SetTargetFPS(int fps)
+    {
+        this.TargetElapsedTime = TimeSpan.FromTicks(TimeSpan.TicksPerSecond / fps);
+    }
+
+
     protected override void Update(GameTime gt)
     {
         base.Update(gt);
-        _fpsTimer += gt.ElapsedGameTime;
-        if (_fpsTimer >= TimeSpan.FromSeconds(1))
+
+        if (ShowFPS)
         {
-            _fpsTimer = TimeSpan.Zero;
-            UpdateFPS(gt);
+            _fpsTimer += gt.ElapsedGameTime;
+            if (_fpsTimer >= TimeSpan.FromSeconds(1))
+            {
+                _fpsTimer = TimeSpan.Zero;
+                UpdateFPS(gt);
+            }
         }
-    }
-
-    protected override void Draw(GameTime gt)
-    {
-        base.Draw(gt);
-
-        // this _spritescale needs to be applied to my SCENE Draw code!
-        // this snippet is just for the FPS display
-        //_spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, _spriteScale);
-
-        _spriteBatch.Begin();
-        if (_showFPS)
-        {
-            _fpsFont.Text = $"FPS: {_fps}";
-            _fpsFont.Draw(_spriteBatch);
-        }
-        _spriteBatch.End();
     }
 
 

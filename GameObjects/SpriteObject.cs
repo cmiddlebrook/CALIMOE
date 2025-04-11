@@ -5,56 +5,21 @@ using System;
 namespace CALIMOE;
 public class SpriteObject : GameObject
 {
-    protected Vector2 _origin;
-    protected float _rotation;
-    protected Vector2 _startOrigin;
-    protected Vector2 _startPosition;
-    protected float _startRotation;
-    protected Vector2 _startVelocity;
     protected Texture2D _texture;
-    protected Vector2 _velocity;
-
-    public Vector2 Origin
-    {
-        get => _origin;
-        set
-        {
-            _origin = value;
-            UpdateBounds();
-        }
-    }
-
-
-    public float Rotation
-    {
-        get => _rotation;
-        set => _rotation = value;
-    }
-
-
-    public Vector2 Velocity
-    {
-        get => _velocity;
-        set
-        {
-            _velocity = value;
-            UpdateBounds();
-        }
-    }
 
 
 
     public Vector2 Center => new Vector2(_bounds.X + _bounds.Width / 2f, _bounds.Y + _bounds.Height / 2f);
 
 
-    public SpriteObject(Texture2D texture)
+    public SpriteObject(string texturePath)
     {
-        _texture = texture;
+        _texture = Calimoe.AssetManager.LoadTexture(texturePath);
         Reset();
     }
-    public SpriteObject(Texture2D texture, Vector2 startPosition, Vector2 startVelocity, float startScale)
+    public SpriteObject(string texturePath, Vector2 startPosition, Vector2 startVelocity, float startScale)
 	{
-        _texture = texture;
+        _texture = Calimoe.AssetManager.LoadTexture(texturePath);
         _origin = Vector2.Zero;
         _startPosition = startPosition;
         _startScale = startScale;
@@ -79,11 +44,6 @@ public class SpriteObject : GameObject
         _bounds.Height = (int)(_texture.Height * Scale);
     }
 
-    public override void Update(GameTime gt)
-    {
-        _position += _velocity * (float)gt.ElapsedGameTime.TotalSeconds;
-        UpdateBounds();
-    }
 
     public override void Draw(SpriteBatch sb)
     {
