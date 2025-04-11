@@ -7,14 +7,15 @@ namespace CALIMOE;
 
 public class SceneManager
 {
-    private Calimoe _game;
+    //private Calimoe _game;
     private Dictionary<string, GameScene> _scenes;
     private GameScene _currentScene;
+    protected Matrix _spriteScale = Matrix.Identity;
+
 
     public string Current => _currentScene?.Name ?? "";
-    public SceneManager(Calimoe game)
+    public SceneManager()
     {
-        _game = game;
         _scenes = new Dictionary<string, GameScene>();
     }
 
@@ -24,9 +25,23 @@ public class SceneManager
         Debug.Assert(scene.Name != "", "Scene name must be defined");
 
         _scenes.Add(scene.Name.ToLower(), scene);
-        scene.LoadContent();
     }
 
+    public void Draw(SpriteBatch sb)
+    {
+        sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, _spriteScale);
+
+        if (_currentScene == null) return;
+        _currentScene.Draw(sb);
+
+        sb.End();
+
+    }
+
+    public void SetSpriteScale(Matrix spriteScale)
+    {
+        _spriteScale = spriteScale;
+    }
     public void SwitchScene(string name)
     {
         name = name.ToLower();
@@ -35,8 +50,6 @@ public class SceneManager
             if (_currentScene != null) _currentScene.Exit();
 
             _currentScene = _scenes[name];
-            _game.ClearColour = _currentScene.ClearColour;
-
             _currentScene.Enter();
         }
 
@@ -48,12 +61,6 @@ public class SceneManager
     {
         if (_currentScene == null) return;
         _currentScene.Update(gt);
-    }
-
-    public void Draw(SpriteBatch sb)
-    {
-        if (_currentScene == null) return;
-        _currentScene.Draw(sb);
     }
 
 }

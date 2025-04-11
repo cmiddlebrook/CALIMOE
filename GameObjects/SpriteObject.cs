@@ -47,7 +47,10 @@ public class SpriteObject : GameObject
 
     public override void Draw(SpriteBatch sb)
     {
-        sb.Draw(_texture, Position, null, Colour, Rotation, Origin, Scale, SpriteEffects.None, 0f);
+        if (Visible)
+        {
+            sb.Draw(_texture, Position, null, Colour, Rotation, Origin, Scale, SpriteEffects.None, 0f);
+        }
 
         base.Draw(sb);
     }

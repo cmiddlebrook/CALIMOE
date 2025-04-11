@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace CALIMOE;
 
@@ -11,7 +12,7 @@ public class Calimoe : Game
     protected GraphicsDeviceManager _graphics;
     protected SpriteBatch _spriteBatch;
     protected int _fallbackTextureSize = 128;
-    protected Matrix _spriteScale;
+    protected Matrix _spriteScale = Matrix.Identity;
     protected Point _windowSize;
     protected Point _worldSize;
 
@@ -23,7 +24,6 @@ public class Calimoe : Game
     protected int _fps = 0;
     protected TimeSpan _fpsTimer;
     protected TextObject _fpsFont;
-
 
     // Properties
     public static AssetManager AssetManager { get; private set; }
@@ -47,10 +47,11 @@ public class Calimoe : Game
         ClearColour = Color.Transparent;
 
         Content.RootDirectory = "Content";
-        _sm = new SceneManager(this);
+        _sm = new SceneManager();
         _ih = new InputHelper();
 
         IsMouseVisible = true;
+        FullScreen = false;
     }
 
     protected void ApplyResolution(bool fullScreen)
@@ -75,6 +76,7 @@ public class Calimoe : Game
         GraphicsDevice.Viewport = CalculateViewport(screenSize);
         _spriteScale = Matrix.CreateScale((float)GraphicsDevice.Viewport.Width / _worldSize.X,
             (float)GraphicsDevice.Viewport.Height / _worldSize.Y, 1.0f);
+        _sm.SetSpriteScale(_spriteScale);
     }
 
     protected Viewport CalculateViewport(Point windowSize)
@@ -105,8 +107,6 @@ public class Calimoe : Game
         base.Draw(gt);
 
         // this _spritescale needs to be applied to my SCENE Draw code!
-        // this snippet is just for the FPS display
-        //_spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, _spriteScale);
 
         _spriteBatch.Begin();
         if (ShowFPS)
@@ -157,6 +157,7 @@ public class Calimoe : Game
                 UpdateFPS(gt);
             }
         }
+
     }
 
 
