@@ -11,7 +11,6 @@ namespace CALIMOE;
 public class GameScene
 {
     protected SceneManager _sm;
-    protected AssetManager _am;
     protected InputHelper _ih;
 
     protected string _name = "";
@@ -19,10 +18,9 @@ public class GameScene
 
     protected Color _clearColour = Color.Transparent;
     public Color ClearColour => _clearColour;
-    public GameScene(SceneManager sm, AssetManager am, InputHelper ih)
+    public GameScene(SceneManager sm, InputHelper ih)
     {
         _sm = sm;
-        _am = am;
         _ih = ih;
     }
 
@@ -38,7 +36,7 @@ public class GameScene
     {
     }
 
-    public virtual void HandleInput(GameTime gt)
+    public virtual void HandleInput()
     {
     }
 

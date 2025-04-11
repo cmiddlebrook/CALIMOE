@@ -14,21 +14,21 @@ namespace CALIMOE
         private ContentManager _cm;
         private SoundEffect _silentSoundFx;
         private Song _silentSong;
-        private int _fallbackTextureSize;
         private Texture2D _missingTexture;
-        public AssetManager(ContentManager cm, int fallbackTextureSize)
+
+        public int FallbackTextureSize { get; set; } = 128;
+        public AssetManager(ContentManager cm)
         {
             _cm = cm;
             cm.RootDirectory = "Content";
-
-            _fallbackTextureSize = fallbackTextureSize;
+            LoadContent();
         }
 
-        public void LoadContent()
+        private void LoadContent()
         {
             _silentSoundFx = _cm.Load<SoundEffect>("Fallback/silent-fx");
             _silentSong = _cm.Load<Song>("Fallback/silent-song");
-            _missingTexture = _cm.Load<Texture2D>($"Fallback/missing-tx{_fallbackTextureSize}");
+            _missingTexture = _cm.Load<Texture2D>($"Fallback/missing-tx{FallbackTextureSize}");
 
             Debug.Assert(_silentSoundFx != null, "Missing silent sound effect");
             Debug.Assert(_silentSong != null, "Missing silent song");

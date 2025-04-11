@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using System;
+using System.Numerics;
 
 
 namespace CALIMOE;
@@ -10,9 +11,8 @@ public class InputHelper
     protected KeyboardState _currentKeyboardState;
     protected MouseState _previousMouseState;
     protected MouseState _currentMouseState;
-    public InputHelper()
-    {
-    }
+
+    public Vector2 MousePosition => new Vector2(_currentMouseState.X, _currentMouseState.Y);
 
     public void Update()
     {
@@ -27,9 +27,9 @@ public class InputHelper
         return Keyboard.GetState().IsKeyDown(key);
     }
 
-    public bool StartKeyPress(Keys key)
+    public bool KeyPressed(Keys key)
     {
-        return Keyboard.GetState().IsKeyDown(key) && _previousKeyboardState.IsKeyUp(key);
+        return _currentKeyboardState.IsKeyDown(key) && _previousKeyboardState.IsKeyUp(key);
     }
 
     public bool KeyReleased(Keys key)
@@ -41,8 +41,30 @@ public class InputHelper
     {
         return Keyboard.GetState().IsKeyUp(key);
     }
-    public bool KeyPressed(Keys key)
+
+    public bool LeftButtonClicked()
     {
-        return _currentKeyboardState.IsKeyDown(key) && _previousKeyboardState.IsKeyUp(key);
+        return _currentMouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released;
+    }
+
+    public bool LeftButtonDown()
+    {
+        return _currentMouseState.LeftButton == ButtonState.Pressed;
+    }
+
+    public bool RightButtonClicked()
+    {
+        return _currentMouseState.RightButton == ButtonState.Pressed && _previousMouseState.RightButton == ButtonState.Released;
+    }
+
+    public bool RightButtonDown()
+    {
+        return _currentMouseState.RightButton == ButtonState.Pressed;
+    }
+
+
+    public bool StartKeyPress(Keys key)
+    {
+        return Keyboard.GetState().IsKeyDown(key) && _previousKeyboardState.IsKeyUp(key);
     }
 }

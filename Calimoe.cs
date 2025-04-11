@@ -9,10 +9,8 @@ public class Calimoe : Game
 {
     protected GraphicsDeviceManager _graphics;
     protected SpriteBatch _spriteBatch;
-    protected AssetManager _am;
     protected SceneManager _sm;
-    protected InputHelper _ih;
-    protected Random _rand = new Random();
+    protected InputHelper _ih;    
     protected int _fallbackTextureSize = 128;
 
     protected TimeSpan _fpsTimer;
@@ -20,7 +18,22 @@ public class Calimoe : Game
     protected TextObject _fpsFont;
     protected bool _showFPS = true;
 
+    protected Color _noColour = Color.White;
+
+    protected Matrix _spriteScale;
+    protected Point _worldSize;
+    protected Point _windowSize;
+
+    public static AssetManager AssetManager { get; private set; }
+    public static Random Random { get; private set; } = new Random();
+
     public Color ClearColour {  get; set; }
+
+    protected bool FullScreen
+    {
+        get { return _graphics.IsFullScreen; }
+        set { ApplyResolution(value); }
+    }
 
     public Calimoe()
     {
@@ -29,20 +42,67 @@ public class Calimoe : Game
         ClearColour = Color.Transparent;
 
         Content.RootDirectory = "Content";
-        _am = new AssetManager(Content, _fallbackTextureSize);
         _sm = new SceneManager(this);
         _ih = new InputHelper();
 
         IsMouseVisible = true;
     }
 
-    protected void StartFullScreen()
+    protected void ApplyResolution(bool fullScreen)
     {
-        _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-        _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-        _graphics.IsFullScreen = true;
+        _graphics.IsFullScreen = fullScreen;
+
+        Point screenSize;
+        if (fullScreen)
+        {
+            screenSize = new Point(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width,
+                GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
+        }
+        else
+        {
+            screenSize = _windowSize;
+        }
+
+        _graphics.PreferredBackBufferWidth = screenSize.X;
+        _graphics.PreferredBackBufferHeight = screenSize.Y;
         _graphics.ApplyChanges();
+
+        GraphicsDevice.Viewport = CalculateViewport(screenSize);
+        _spriteScale = Matrix.CreateScale((float)GraphicsDevice.Viewport.Width / _worldSize.X,
+            (float)GraphicsDevice.Viewport.Height / _worldSize.Y, 1.0f);
     }
+
+    protected Viewport CalculateViewport(Point windowSize)
+    {
+        Viewport viewport = new Viewport();
+        float gameAspectRatio = (float)_worldSize.X / _worldSize.Y;
+        float windowAspectRatio = (float)windowSize.X / windowSize.Y;
+
+        if (windowAspectRatio > gameAspectRatio)
+        {
+            viewport.Width = (int)(windowSize.Y * gameAspectRatio);
+            viewport.Height = windowSize.Y;
+        }
+        else
+        {
+            viewport.Width = windowSize.X;
+            viewport.Height = (int)(windowSize.X / gameAspectRatio);
+        }
+
+        viewport.X = (windowSize.X - viewport.Width) / 2;
+        viewport.Y = (windowSize.Y - viewport.Height) / 2;
+
+        return viewport;
+    }
+
+    protected Vector2 ScreenToWorld(Vector2 screenPosition)
+    {
+        Vector2 viewportTopLeft = new Vector2(GraphicsDevice.Viewport.X, GraphicsDevice.Viewport.Y);
+        Vector2 adjusted = screenPosition - viewportTopLeft;
+        Matrix inverse = Matrix.Invert(_spriteScale);
+        return Vector2.Transform(adjusted, inverse);
+    }
+
 
     protected void SetTargetFPS(int fps)
     {
@@ -57,12 +117,8 @@ public class Calimoe : Game
 
     protected override void LoadContent()
     {
-        // this was the hack to create a 1 pixel texture for drawing simple shapes
-        //Globals.pixel = new Texture2D(GraphicsDevice, 1, 1);
-        //Globals.pixel.SetData<Color>([Color.White]);
-
-        _am.LoadContent();
-        _fpsFont = new TextObject(_am.LoadFont("FPS"), "");
+        AssetManager = new AssetManager(Content);
+        _fpsFont = new TextObject(AssetManager.LoadFont("FPS"), "");
         _fpsFont.Position = new Vector2(4, 4);
     }
 
@@ -80,6 +136,10 @@ public class Calimoe : Game
     protected override void Draw(GameTime gt)
     {
         base.Draw(gt);
+
+        // this _spritescale needs to be applied to my SCENE Draw code!
+        // this snippet is just for the FPS display
+        //_spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, _spriteScale);
 
         _spriteBatch.Begin();
         if (_showFPS)
