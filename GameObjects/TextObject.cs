@@ -38,22 +38,22 @@ public class TextObject : GameObject
     {
         _font = font;
         Text = text;
-        UpdateBounds();
+        //UpdateBounds();
     }
-    protected override void UpdateBounds()
-    {
-        _textSize = _font.MeasureString(Text) * Scale;
-        _bounds.X = (int)Math.Round(_position.X);
-        _bounds.Y = (int)Math.Round(_position.Y);
-        _bounds.Width = (int)_textSize.X;
-        _bounds.Height = (int)_textSize.Y;
-    }
+    //protected override void UpdateBounds()
+    //{
+    //    _textSize = _font.MeasureString(Text) * Scale;
+    //    _bounds.X = (int)Math.Round(_position.X);
+    //    _bounds.Y = (int)Math.Round(_position.Y);
+    //    _bounds.Width = (int)_textSize.X;
+    //    _bounds.Height = (int)_textSize.Y;
+    //}
 
 
-    public override void Update(GameTime gt)
-    {
-        UpdateBounds();
-    }
+    //public override void Update(GameTime gt)
+    //{
+    //    UpdateBounds();
+    //}
     
     public override void Draw(SpriteBatch sb)
 	{
@@ -62,58 +62,58 @@ public class TextObject : GameObject
             Viewport = sb.GraphicsDevice.Viewport.Bounds;
         }
 
-        switch (_alignment)
-        {
-            case Alignment.Horizontal:
-                {
-                    _position.X = (Viewport.Width - _textSize.X) / 2;
-                    break;
-                }
-            case Alignment.Vertical:
-                {
-                    _position.Y = (Viewport.Height - _textSize.Y) / 2;
-                    break;
-                }
-            case Alignment.Both:
-                {
-                    _position.X = (Viewport.Width - _textSize.X) / 2;
-                    _position.Y = (Viewport.Height - _textSize.Y) / 2;
-                    break;
-                }
+        //switch (_alignment)
+        //{
+        //    case Alignment.Horizontal:
+        //        {
+        //            LocalPosition.X = (Viewport.Width - _textSize.X) / 2;
+        //            break;
+        //        }
+        //    case Alignment.Vertical:
+        //        {
+        //            LocalPosition.Y = (Viewport.Height - _textSize.Y) / 2;
+        //            break;
+        //        }
+        //    case Alignment.Both:
+        //        {
+        //            _position.X = (Viewport.Width - _textSize.X) / 2;
+        //            _position.Y = (Viewport.Height - _textSize.Y) / 2;
+        //            break;
+        //        }
 
-            case Alignment.None:
-            default:
-                break;
-        }
+        //    case Alignment.None:
+        //    default:
+        //        break;
+        //}
 
         if (Shadow)
         {
-            var shadowPosition = new Vector2(Position.X + _shadowThickness, Position.Y + _shadowThickness);
+            var shadowPosition = new Vector2(LocalPosition.X + _shadowThickness, LocalPosition.Y + _shadowThickness);
             sb.DrawString(_font, Text, shadowPosition, _shadowColour, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
         }
-        sb.DrawString(_font, Text, Position, _colour, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+        sb.DrawString(_font, Text, GlobalPosition, Colour, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
 
         base.Draw(sb);
     }
 
 
 
-    public void CenterHorizontal(int y)
-    {
-        _alignment = Alignment.Horizontal;
-        _position.Y = y;
-    }
+    //public void CenterHorizontal(int y)
+    //{
+    //    _alignment = Alignment.Horizontal;
+    //    _position.Y = y;
+    //}
 
-    public void CenterVertical(int x)
-    {
-        _alignment = Alignment.Vertical;
-        _position.X = x;
-    }
+    //public void CenterVertical(int x)
+    //{
+    //    _alignment = Alignment.Vertical;
+    //    _position.X = x;
+    //}
 
-    public void CenterBoth()
-    {
-        _alignment = Alignment.Both;
-    }
+    //public void CenterBoth()
+    //{
+    //    _alignment = Alignment.Both;
+    //}
 
     public void ConfigureShadow(int thickness, Color colour)
     {

@@ -17,25 +17,21 @@ public class Calimoe : Game
     protected Point _worldSize;
 
     // Systems
-    protected InputHelper _ih;
-    protected SceneManager _sm;
+    protected InputHelper _ih = new InputHelper();
 
     // FPS
     protected int _fps = 0;
     protected TimeSpan _fpsTimer;
     protected TextObject _fpsFont;
 
-    // Properties
-    public static AssetManager AssetManager { get; private set; }
-    public static Color NoColour => Color.White;
-    public static Random Random { get; private set; } = new Random();
-
-    public Color ClearColour {  get; set; }
+    // statics
+    public static AssetManager AssetManager { get; protected set; }
+    protected static SceneManager _sm = new SceneManager();
 
     protected bool FullScreen
     {
         get { return _graphics.IsFullScreen; }
-        set { ApplyResolution(value); }
+        set { ApplyResolution(value); } 
     }
 
     protected bool ShowFPS { get; set; } = true;
@@ -44,14 +40,10 @@ public class Calimoe : Game
     {
         _graphics = new GraphicsDeviceManager(this);
         _graphics.SynchronizeWithVerticalRetrace = true;
-        ClearColour = Color.Transparent;
 
         Content.RootDirectory = "Content";
-        _sm = new SceneManager();
-        _ih = new InputHelper();
 
         IsMouseVisible = true;
-        FullScreen = false;
     }
 
     protected void ApplyResolution(bool fullScreen)
@@ -76,7 +68,6 @@ public class Calimoe : Game
         GraphicsDevice.Viewport = CalculateViewport(screenSize);
         _spriteScale = Matrix.CreateScale((float)GraphicsDevice.Viewport.Width / _worldSize.X,
             (float)GraphicsDevice.Viewport.Height / _worldSize.Y, 1.0f);
-        _sm.SetSpriteScale(_spriteScale);
     }
 
     protected Viewport CalculateViewport(Point windowSize)
@@ -104,30 +95,37 @@ public class Calimoe : Game
 
     protected override void Draw(GameTime gt)
     {
-        base.Draw(gt);
+        GraphicsDevice.Clear(Color.Black);
+        _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, _spriteScale);
 
-        // this _spritescale needs to be applied to my SCENE Draw code!
-
-        _spriteBatch.Begin();
         if (ShowFPS)
         {
             _fpsFont.Text = $"FPS: {_fps}";
             _fpsFont.Draw(_spriteBatch);
         }
+
+        _sm.Draw(_spriteBatch);
+
         _spriteBatch.End();
     }
 
-    protected override void Initialize()
+    protected virtual void HandleInput()
     {
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
-        base.Initialize();
+        _ih.Update();
+
+        if (_ih.KeyPressed(Keys.F5)) FullScreen = !FullScreen;
+
+        _sm.HandleInput(_ih);
     }
+
 
     protected override void LoadContent()
     {
+        _spriteBatch = new SpriteBatch(GraphicsDevice);
         AssetManager = new AssetManager(Content);
+        FullScreen = false;
         _fpsFont = new TextObject(AssetManager.LoadFont("FPS"), "");
-        _fpsFont.Position = new Vector2(4, 4);
+        _fpsFont.LocalPosition = new Vector2(4, 4);
     }
 
     protected Vector2 ScreenToWorld(Vector2 screenPosition)
@@ -146,7 +144,7 @@ public class Calimoe : Game
 
     protected override void Update(GameTime gt)
     {
-        base.Update(gt);
+        HandleInput();
 
         if (ShowFPS)
         {
@@ -158,6 +156,7 @@ public class Calimoe : Game
             }
         }
 
+        _sm.Update(gt);
     }
 
 
