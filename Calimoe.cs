@@ -6,15 +6,15 @@ using System.Collections.Generic;
 
 namespace CALIMOE;
 
-public class Calimoe : Game
+public abstract class Calimoe : Game
 {
     // Graphics
     protected GraphicsDeviceManager _graphics;
     protected SpriteBatch _spriteBatch;
     protected int _fallbackTextureSize = 128;
     protected Matrix _spriteScale = Matrix.Identity;
-    protected Point _windowSize;
-    protected Point _worldSize;
+    protected Point _windowSize = new Point(1280, 720);
+    protected Point _worldSize = new Point(1280, 720);
 
     // Systems
     protected InputHelper _ih = new InputHelper();

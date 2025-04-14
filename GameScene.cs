@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace CALIMOE;
 
-public abstract class GameScene
+public abstract class GameScene : IDrawable
 {
     protected GameObjects _sceneObjects = new GameObjects();
 

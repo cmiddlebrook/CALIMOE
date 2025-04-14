@@ -92,8 +92,6 @@ public class TextObject : GameObject
             sb.DrawString(_font, Text, shadowPosition, _shadowColour, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
         }
         sb.DrawString(_font, Text, GlobalPosition, Colour, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
-
-        base.Draw(sb);
     }
 
 

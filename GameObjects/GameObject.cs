@@ -5,7 +5,7 @@ using System;
 
 namespace CALIMOE;
 
-public abstract class GameObject
+public abstract class GameObject : IDrawable
 {
     #region oldcode
     //protected Rectangle _bounds;
@@ -101,7 +101,7 @@ public abstract class GameObject
         }
     }
 
-    public Color Colour;
+    public Color Colour { get; set; }
 
     public Vector2 LocalPosition { get; set; }
 
@@ -123,13 +123,7 @@ public abstract class GameObject
         Colour = Color.White;
     }
 
-    public virtual void Draw(SpriteBatch sb)
-    {
-        //if (_drawBounds)
-        //{
-        //    Primitives.DrawRectangle(sb, _bounds, Color.Red, 1);
-        //}
-    }
+    public abstract void Draw(SpriteBatch sb);
 
     public virtual void HandleInput(InputHelper ih) { }
 
